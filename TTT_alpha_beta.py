@@ -104,53 +104,50 @@ class State:
         return self.current_player
 
 
-def minimax(state):
-	moves = state.actions()
-	best_move = moves[0]
-	best_score = -100000
+def alpha_beta(state):
+    moves = state.actions()
+    best_move = moves[0]
+    v = -10000
+    
+    for move in moves:
+        clone = state.result(move)
+        score = max_play(clone, -10000, 10000)
+        if score > v:
+            best_move = move
+            v = score
 
-	for move in moves:
-		clone = state.result(move)
-		score = min_play(clone)
-		if score > best_score:
-			best_move = move
-			best_score = score
+    return best_move
 
-	return best_move
+def max_play(state, a, b):
+    if state.terminal_test():
+        return state.utility()
+
+    moves = state.actions()
+    v = -10000
+
+    for move in moves:
+        clone = state.result(move)
+        v = max(v, min_play(clone, a,b))
+        if v >= b:
+            return v
+        a = max(a, v)
+    return v
 
 
-def min_play(state):
-	if state.terminal_test():
-		return state.utility()
+def min_play(state, a, b):
+    if state.terminal_test():
+        return state.utility()
 
-	moves = state.actions()
-	best_score = 100000
-
-	for move in moves:
-		clone = state.result(move)
-		score = max_play(clone)
-		if score < best_score:
-			best_move = move
-			best_score = score
-
-	return best_score
-
-def max_play(state):
-	if state.terminal_test():
-		return state.utility()
-
-	moves = state.actions()
-	best_score = -100000
-
-	for move in moves:
-		clone = state.result(move)
-		score = min_play(clone)
-		if score > best_score:
-			best_move = move
-			best_score = score
-
-	return best_score
-
+    v = 10000
+    moves = state.actions()
+    
+    for move in moves:
+        clone = state.result(move)
+        v = min(v, max_play(clone, a,b))
+        if v <= a:
+            return v
+        b = min(b, v)
+    return v
 
 def main():
 
@@ -171,7 +168,7 @@ def main():
 			state.make_play(play-1) # caso tudo esteja certo, realiza a jogada
 
 			if(not state.terminal_test()): # necessário para verificar apenas se o usuário empatou o jogo, uma vez que o nunca irá vencer
-				state.make_play(minimax(state)) # busca a melhor jogada com minimax e realiza
+				state.make_play(alpha_beta(state)) # busca a melhor jogada com minimax e realiza
 				state.show_state()
 
 			# verificações do término da partida
@@ -187,5 +184,7 @@ def main():
 
 		else:
 			print('Entre com um número entre 1 e 9')
+
+	input('')
 
 main()
