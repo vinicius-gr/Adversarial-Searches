@@ -111,7 +111,7 @@ def alpha_beta(state):
     
     for move in moves:
         clone = state.result(move)
-        score = max_play(clone, -10000, 10000)
+        score = min_play(clone, -10000, 10000)
         if score > v:
             best_move = move
             v = score
