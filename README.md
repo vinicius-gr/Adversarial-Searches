@@ -9,4 +9,4 @@ The implemented searches are:
 In this repo there is one 2 player game: Tic Tac Toe, and the algorithms are in different scripts
 
    * Minimax implemented on TTT_minimax.py
-   * Alpha-Beta Prunning implemented on TTT_alhpa_beta.py
+   * Alpha-Beta Prunning implemented on TTT_alpha_beta.py
